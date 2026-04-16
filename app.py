@@ -1,5 +1,6 @@
 import streamlit as st
 from PIL import Image
+import random
 
 # Page config
 st.set_page_config(page_title="Aerial Object Classification", layout="centered")
@@ -16,13 +17,11 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption="📷 Uploaded Image", use_column_width=True)
 
-    # Simulated prediction (Demo Mode)
-    import random
+    # Fake prediction (demo)
+    prediction = random.choice(["🐦 Bird", "🚁 Drone"])
+    st.success(f"✅ Prediction: {prediction}")
 
-prediction = random.choice(["🐦 Bird", "🚁 Drone"])
-
-st.success(f"✅ Prediction: {prediction}")
-    # Info for clarity
+    # Info (CORRECT INDENTATION)
     st.info("⚠️ Note: Model inference is demonstrated in Colab. This is a deployment UI preview due to cloud limitations.")
 
 # Footer
