@@ -1,13 +1,27 @@
 import streamlit as st
 from PIL import Image
 
-st.title("Aerial Object Classification (Bird vs Drone)")
+# Page config
+st.set_page_config(page_title="Aerial Object Classification", layout="centered")
 
-uploaded_file = st.file_uploader("Upload Image", type=["jpg","png","jpeg"])
+# Title
+st.title("🚀 Aerial Object Classification (Bird vs Drone)")
+st.markdown("### 📌 Upload an aerial image to classify Bird or Drone")
 
-if uploaded_file:
-    img = Image.open(uploaded_file)
-    st.image(img, caption="Uploaded Image")
+# Upload
+uploaded_file = st.file_uploader("Upload Image", type=["jpg", "png", "jpeg"])
 
-    # Demo output
-    st.success("Prediction working (Demo Mode)")
+if uploaded_file is not None:
+    # Display image
+    image = Image.open(uploaded_file)
+    st.image(image, caption="📷 Uploaded Image", use_column_width=True)
+
+    # Simulated prediction (Demo Mode)
+    st.success("✅ Prediction: Bird / Drone (Demo Mode)")
+
+    # Info for clarity
+    st.info("⚠️ Note: Model inference is demonstrated in Colab. This is a deployment UI preview due to cloud limitations.")
+
+# Footer
+st.markdown("---")
+st.markdown("👨‍💻 Developed for Aerial Surveillance AI Project")
