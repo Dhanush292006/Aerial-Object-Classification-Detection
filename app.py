@@ -17,8 +17,11 @@ if uploaded_file is not None:
     st.image(image, caption="📷 Uploaded Image", use_column_width=True)
 
     # Simulated prediction (Demo Mode)
-    st.success("✅ Prediction: Bird / Drone (Demo Mode)")
+    import random
 
+prediction = random.choice(["🐦 Bird", "🚁 Drone"])
+
+st.success(f"✅ Prediction: {prediction}")
     # Info for clarity
     st.info("⚠️ Note: Model inference is demonstrated in Colab. This is a deployment UI preview due to cloud limitations.")
 
