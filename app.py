@@ -13,8 +13,6 @@ if uploaded_file:
     img = Image.open(uploaded_file)
     st.image(img, caption="Uploaded Image")
 
-    # Run YOLO
     results = model(img)
 
-    # Show output
     st.image(results[0].plot(), caption="Detection Result")
