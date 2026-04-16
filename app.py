@@ -1,7 +1,11 @@
 import streamlit as st
 from PIL import Image
+from ultralytics import YOLO
 
-st.title("Aerial Object Classification (Bird vs Drone)")
+# Load YOLO model
+model = YOLO("best.pt")   # upload your model to repo
+
+st.title("Aerial Object Detection (Bird vs Drone)")
 
 uploaded_file = st.file_uploader("Upload Image", type=["jpg","png","jpeg"])
 
@@ -9,5 +13,8 @@ if uploaded_file:
     img = Image.open(uploaded_file)
     st.image(img, caption="Uploaded Image")
 
-    # Demo output
-    st.success("Prediction working (Demo Mode)")
+    results = model(img)
+
+    # Show detection result
+    st.image(results[0].plot(), caption="Detection Result")
+    
