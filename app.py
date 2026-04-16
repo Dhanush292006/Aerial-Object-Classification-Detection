@@ -2,10 +2,7 @@ import streamlit as st
 from PIL import Image
 from ultralytics import YOLO
 
-# Load YOLO model
-model = YOLO("best.pt")
-
-st.title("Aerial Object Detection (Bird vs Drone)")
+st.title("Aerial Object Detection")
 
 uploaded_file = st.file_uploader("Upload Image", type=["jpg","png","jpeg"])
 
@@ -13,6 +10,11 @@ if uploaded_file:
     img = Image.open(uploaded_file)
     st.image(img, caption="Uploaded Image")
 
-    results = model(img)
+    try:
+        model = YOLO("yolov8nt.pt")   
+        results = model(img)
 
-    st.image(results[0].plot(), caption="Detection Result")
+        st.image(results[0].plot(), caption="Detection Result")
+
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
