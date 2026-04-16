@@ -1,41 +1,61 @@
 import streamlit as st
 from PIL import Image
 from ultralytics import YOLO
+import numpy as np
 
-st.title("🚀 Aerial Object Classification (Real AI Prediction)")
+st.set_page_config(page_title="Aerial Detection", layout="centered")
 
-uploaded_file = st.file_uploader("Upload Image", type=["jpg", "png", "jpeg"])
+st.title("🚀 Aerial Object Classification & Detection")
+st.markdown("Upload an aerial image to classify **Bird or Drone**")
 
-if uploaded_file is not None:
+uploaded_file = st.file_uploader("Upload Image", type=["jpg","png","jpeg"])
+
+if uploaded_file:
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(image, caption="📷 Uploaded Image", use_column_width=True)
 
     try:
-        # Load YOLO model (real AI)
+        # Load YOLO model
         model = YOLO("yolov8n.pt")
 
-        results = model(image)
-        detected_classes = results[0].names
-        boxes = results[0].boxes
+        results = model(image)[0]
 
-        prediction = "Unknown"
+        # Extract detections
+        names = results.names
+        boxes = results.boxes
+
+        prediction = "❓ Unknown"
+        confidence = 0
 
         for box in boxes:
             cls_id = int(box.cls[0])
-            label = detected_classes[cls_id]
+            conf = float(box.conf[0])
+            label = names[cls_id]
 
             if label == "bird":
                 prediction = "🐦 Bird"
+                confidence = conf
                 break
             elif label in ["airplane", "kite"]:
                 prediction = "🚁 Drone"
+                confidence = conf
                 break
 
-        if prediction == "Unknown":
-            prediction = "❓ Not Bird/Drone"
+        # If nothing detected
+        if prediction == "❓ Unknown":
+            st.warning("No Bird/Drone detected")
+        else:
+            st.success(f"✅ Prediction: {prediction}")
+            st.write(f"🔍 Confidence: {round(confidence*100,2)}%")
 
-        st.success(f"✅ Prediction: {prediction}")
-        st.image(results[0].plot(), caption="Detection Result")
+        # 🔲 Show detection image (bounding boxes)
+        st.image(results.plot(), caption="📦 Detection Result")
+
+        # 📊 Optional graph (confidence bar)
+        st.markdown("### 📊 Confidence Visualization")
+        st.bar_chart({
+            "Confidence": [confidence]
+        })
 
     except Exception as e:
         st.error(f"Error: {e}")
